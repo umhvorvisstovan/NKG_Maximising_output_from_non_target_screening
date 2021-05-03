@@ -1,0 +1,22 @@
+country,country_name,country_lat,country_lng,sample_no,matrix,sample_id,location,site,species,sampling_date,latitude,longitude,comments
+FI,Finland,62.219,24.931,219,Effluent,FI-1-Eff,Helsinki,Viikinmäki,Effluent,2015-10-05T00:00:00Z,60.2267,24.99645,NA
+SE,Sweden,64.55,17.42,220,Effluent,SE-1-Eff,Stockholm,Henriksdal WWTP,Effluent,2015-09-29T00:00:00Z,59.30975,18.107633333333332,NA
+DK,Denmark,54.23,9.04,221,Effluent,DK-1-Eff,Aarhus,Marselisborg WWTP,Effluent,2015-09-28T00:00:00Z,56.234,10.34995,NA
+IS,Iceland,66.59,-19.24,222,Effluent,IS-1-Eff,Reykjavik,Klettagarðar WWTP,Effluent,2015-09-15T00:00:00Z,64.15553333333334,-21.87275,NA
+NO,Norway,61.81,8.34,223,Effluent,NO-1-Eff,Oslo,VEAS,Effluent,NA,59.793191666666665,10.499575,NA
+GL,Greenland,71.42,-42.68,224,Effluent,GL-1-Eff,Nuuk,Kakillarnat,Effluent,2015-09-29T00:00:00Z,64.19687,-51.70252,Untrated Wastwater
+FO,Faroe Islands,63.389,-6.955,225,Effluent,FO-1-Eff,Tórshavn,VA11 (Sersjantvíkin),Effluent,2015-10-08T00:00:00Z,62.00783333333333,-6.761316666666667,Domestic mainly STP's
+FI,Finland,62.219,24.931,228,Biota,FI-1-Fis,Helsinki,Vanhankaupunginselkä,Perch,2015-09-11T00:00:00Z,60.200833333333335,24.994633333333333,NA
+SE,Sweden,64.55,17.42,229,Biota,SE-1-Fis,Stockholm,Henriksdal WWTP,Perch,2015-09-24T00:00:00Z,59.32025,18.13525,NA
+DK,Denmark,54.23,9.04,230,Biota,DK-1-Fis,Roskilde,Risø,Eelpout,2015-09-29T00:00:00Z,55.68833333333333,12.075,NA
+IS,Iceland,66.59,-19.24,231,Biota,IS-1-Fis,Reykjavik,Inner Faxafloi bay,Cod,2015-09-14T00:00:00Z,64.19228333333334,-21.9226,5 km from the WWTP in inner Fbay at the end of the WWT pipe outlet
+NO,Norway,61.81,8.34,232,Biota,NO-1-Fis,Oslo,Oslofjord,Cod,NA,59.79018333333333,10.519216666666667,NA
+GL,Greenland,71.42,-42.68,233,Biota,GL-1-Fis,Nuuk Fiord,Kakillarnat,Cod,2015-10-02T00:00:00Z,64.19748,-51.705283333333334,"two smal cod just outside the outlet, the 3 bigger was cought around another ww outlet."
+FO,Faroe Islands,63.389,-6.955,234,Biota,FO-1-Fis,Tórshavn,VA11 og VA17,Saithe,2015-10-04T00:00:00Z,62.00225,-6.772866666666666,NA
+FI,Finland,62.219,24.931,237,Sediment,FI-1-Sed,Helsinki,Vanhankaupunginselkä,Sediment,2015-09-24T00:00:00Z,60.200833333333335,24.994633333333333,NA
+DK,Denmark,54.23,9.04,238,Sediment,DK-1-Sed,Roskilde,Ros 60,Sediment,2015-09-15T00:00:00Z,55.70783333333333,12.066666666666666,NA
+SE,Sweden,64.55,17.42,238,Sediment,SE-1-Sed,Stockholm,Henriksdal WWTP,Sediment,2015-09-24T00:00:00Z,59.32025,18.13525,NA
+IS,Iceland,66.59,-19.24,240,Sediment,IS-1-Sed,Reykjavik,Inner Faxafloi bay,Sediment,2015-09-14T00:00:00Z,64.19228333333334,-21.9226,5 km from the WWTP in inner Fbay at the end of the WWT pipe outlet
+NO,Norway,61.81,8.34,241,Sediment,NO-1-Sed,Oslo,Oslofjord,Sediment,NA,59.79018333333333,10.519216666666667,NA
+GL,Greenland,71.42,-42.68,242,Sediment,GL-1-Sed,Nuuk,Kakillarnat,Sediment,2015-09-29T00:00:00Z,64.19692,-51.70575,Sandy sediment taken app 100 m frin the waste water outlet
+FO,Faroe Islands,63.389,-6.955,243,Sediment,FO-1-Sed,Tórshavn,VA 17 (Álaker),Sediment,2015-09-30T00:00:00Z,62.00225,-6.772866666666666,Domestic mainly STP's
