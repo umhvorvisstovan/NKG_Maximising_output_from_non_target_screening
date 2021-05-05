@@ -5,3 +5,6 @@
 
 #ignore rmarkdown generated files
 report.log
+report.pdf
+report_files
+report.docx

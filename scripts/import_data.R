@@ -46,3 +46,23 @@ initial_table <- initial_results %>%
                                           CompoundInfo, DrugType, PotentialSource), by = "Name") %>% 
   mutate(Molecular_Formula = if_else(is.na(Molecular_Formula), MolecularFormula, Molecular_Formula),
          Molecular_Formula = str_remove_all(Molecular_Formula, "-"))
+
+# different between the initial effluent data and the new effluent data
+
+initial_effluent <- initial_results %>%
+  left_join(sample_info, by = "sample_no") %>% 
+  filter(matrix == "Effluent") %>% 
+  distinct(Name) %>%  
+  mutate(study = "initial")
+
+second_effluent <- effluent_features %>%  
+  distinct(Name) %>% 
+  mutate(study = "second")
+
+effluent_substances_only_initial <- initial_effluent %>% 
+  filter(!(Name %in% effluent_features$Name))
+
+effluent_substances_level2_only_second <- effluent_features %>%
+  filter(IDLevel < 3) %>% 
+  distinct(Name) %>%
+  filter(!(Name %in% initial_effluent$Name))

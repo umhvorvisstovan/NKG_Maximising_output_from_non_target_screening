@@ -1,19 +1,24 @@
 ---
 title: ""
 output: 
+  bookdown::word_document2:
+    reference_docx: report/word_style_reference.docx
+    toc: true
+    toc_depth: 3
+    fig_caption: true
+    number_section: true
   bookdown::pdf_document2:
     latex_engine: lualatex
     toc: true
     toc_depth: 3
     fig_caption: true
     number_sections: true
-    highlight: tango
     includes:
       before_body: report/titlepage.tex
 bibliography: report/references.bib
 documentclass: article
 classoption: a4paper
-
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +30,55 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(readxl)
+library(flextable)
+
+typelatex <- is_latex_output()
+
+if (is_latex_output() == TRUE){
+  options(knitr.table.format = "latex")
+  
+} else {
+  options(knit.r.table.format = "markdown")
+  
+  set_flextable_defaults(
+    font.family = "Garmond", 
+    font.size = 9,
+    font.color = "black",
+    table.layout = "autofit",
+    digits = 1,
+    theme_fun = "theme_booktabs"
+  )
+  
+  background_fill <- function(df){
+    
+    if(nrow(df) %% 2 == 0){
+      rep(c(TRUE, FALSE), (nrow(df))/2)
+    } else {
+      c(rep(c(TRUE, FALSE), (nrow(df))/2), TRUE)
+    }
+  } 
+  
+}
+
+# function to add extra to the YAML header
+not_pdf <- function(){
+  if(is_latex_output() == TRUE){
+    FALSE 
+  } else {
+    TRUE
+  }
+}
+
 ```
+
+```{asis, echo = not_pdf()}
+---
+title: "Maximising output from non-taret screening"
+author: "Birgitta Andreasen, Bert van Bavel, Stellan Fischer, Peter Haglund, Pawel Rostkowski, Malcom J. Reid, Saer Samanipour, Martin Schlabach, Cathrin Veenaas, and Maria Dam"
+---
+
+```
+
 
 ```{r include=FALSE}
 #source scripts
@@ -61,7 +114,7 @@ The work was divided into the following tasks:
 * Identify more of the compounds via suspect lists and quarry the digital archive files
 
 
-Because this project mainly consists of data analysis and data curation of list by matching to different types of databases, the results are mainly presented as data tables. Thus this report can be viewed as a data appendix to the initial report by Schlabach et al. [@Schlabach2017].
+Because this project mainly consists of data analysis and data curation of list by matching to different types of databases, the results are mainly presented as data tables. Thus this report can be viewed as a data appendix to the initial report by Schlabach et al. [-@Schlabach2017] .
 
 Further, all the data presented in this report are available on GitHub (https://github.com/umhvorvisstovan/NKG_Maximising_output_from_non_target_screening).
 
@@ -121,15 +174,11 @@ samplingmap <- ggplot() +
 ```
 
 
-
-
-
-Figure \@ref(fig:samplingmap) depicts the Nordic sampling stations, further information on each sample can be found in Table \@ref(tab:samplingtable) in the Appendix.
+Figure \@ref(fig:samplingmap) depicts the sampling stations, samples were collected in the fall of 2015 in  Greenland(GL), Iceland (IS), Faroe Islands (FO), Norway (NO), Denmark (DK), Sweden (SE), and Finland (FI). Further information on each sample can be found in Table \@ref(tab:samplingtable) in Appendix \@ref(samplesappendix) and in the initial sudy [@Schlabach2017].
 
 ```{r samplingmap, fig.cap="Sampling stations"}
 samplingmap
 ```
-
 
 \newpage
 
@@ -176,26 +225,43 @@ gcgc_wide <- gcgc_table %>%
   ungroup() %>% 
   pivot_wider(id_cols = c(Molecular_Formula, Name, CAS, Norman_SusDat_ID, CorrectionFactor), values_from = newConcentration, names_from = c(country)) %>% 
   rename(`Corr. Factor` = CorrectionFactor) %>% 
-  rename(SusDat = Norman_SusDat_ID,
-         `Molecular Formula` = Molecular_Formula)
+  rename(`Norman SusDat ID` = Norman_SusDat_ID,
+         `Molecular Formula` = Molecular_Formula) %>% 
+  arrange(Name)
 ```
 
 ```{r tabgcgc}
-gcgc_wide %>%
-  arrange(Name) %>% 
-  kbl(booktabs = T, linesep = "", escape = F, valign = "c",
-      caption = "Results of the improved methodology in semi-quantification of the GC-MS detected compounds in the biota samples",
-      col.names = linebreak(c("Molecular\nFormula", "Name",
-                              "CAS", "Norman\nSusDat ID",
-                              "Corr.\nFactor", country_labels),
-                            align = "l"),
-      longtable = T) %>%
-  add_header_above(c(rep(" ", 5), "$\\\\text{New Concentration (ng g}^{-1})$" = 7),
-                   line = F, escape = F) %>% 
-  kable_styling(font_size = 8, latex_options = c("striped", "repeat_header")) %>%
-  column_spec(2, width = "6cm") %>% 
-  row_spec(0, angle = 0) %>% 
-  landscape()
+
+caption1 <- "Results of the improved methodology in semi-quantification of the GC-MS detected compounds in the biota samples"
+
+if(typelatex == TRUE) {
+  
+  gcgc_wide %>%
+    kbl(booktabs = T, linesep = "", escape = F, valign = "c",
+        caption = caption1,
+        col.names = linebreak(c("Molecular\nFormula", "Name",
+                                "CAS", "Norman\nSusDat ID",
+                                "Corr.\nFactor", country_labels),
+                              align = "l"),
+        longtable = T) %>%
+    add_header_above(c(rep(" ", 5), "$\\\\text{New Concentration (ng g}^{-1})$" = 7),
+                     line = F, escape = F) %>%
+    kable_styling(font_size = 8, latex_options = c("striped", "repeat_header")) %>%
+    column_spec(2, width = "6cm") %>%
+    row_spec(0, angle = 0) %>%
+    landscape()
+}
+
+if(typelatex == FALSE) {
+  
+  gcgc_wide %>% 
+    flextable() %>%
+    add_header_row(values = c(" ", "New Concentration (ng/g)"), colwidths = c(5,7)) %>% 
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = "tabgcgc")) %>% 
+    bg(i = background_fill(gcgc_wide), bg = "grey95", part = "body")
+}
+
 
 ```
 
@@ -237,30 +303,46 @@ tabeffluent <- effluent_table %>%
   arrange(country) %>%
   mutate(detected = "v") %>%  
   pivot_wider(id_cols = c(Name, CAS, Norman_SusDat_ID),
-              values_from = detected, names_from = c(country)) 
+              values_from = detected, names_from = c(country)) %>% 
+  rename(`Norman SusDat ID` = Norman_SusDat_ID) %>% 
+  arrange(Name)
 
 ```
 
 ```{r tab1}
-tabeffluent %>%
-  arrange(Name) %>%
-  kable(booktabs = T, linesep = "", escape = F, valign = "c",
-        caption = "Features identified at ID Level 2 in effluent samples using deconvoluting and library match algorithm",
+
+caption1 <- "Features identified at ID Level 2 in effluent samples using deconvoluting and library match algorithm"
+
+if(typelatex == TRUE) {
+  
+  tabeffluent %>%
+    kbl(booktabs = T, linesep = "", escape = F, valign = "c",
+        caption = caption1,
         col.names = linebreak(c("Name", "CAS", "Norman\nSusDat ID", country_labels),
                               align = "l"),
         longtable = T) %>%
-  kable_styling(font_size = 8, latex_options = c("striped", "repeat_header")) %>%
-  #column_spec(1:2, width = "2cm") %>%
-  #column_spec(4, width = "1cm") %>%
-  #column_spec(4:11, width = "0.8cm") %>%
-  column_spec(1, width = "9cm") %>%
-  column_spec(4:10, width = "1cm") %>%
-  row_spec(0, angle = 0) %>%
-  landscape()
+    kable_styling(font_size = 8, latex_options = c("striped", "repeat_header")) %>%
+    #column_spec(1:2, width = "2cm") %>%
+    #column_spec(4, width = "1cm") %>%
+    #column_spec(4:11, width = "0.8cm") %>%
+    column_spec(1, width = "9cm") %>%
+    column_spec(4:10, width = "1cm") %>%
+    row_spec(0, angle = 0) %>%
+    landscape()
+}
+
+if(typelatex == FALSE) {
+  tabeffluent %>% 
+    flextable() %>%
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = "tab1")) %>% 
+    bg(i = background_fill(tabeffluent), bg = "grey95", part = "body")
+}
+
 ```
 ## Further curation of the detected and identified compounds list from the initial study. 
 
-The list of compounds identified to ID level 3 and above in the initial study were further curated. This was done mainly using the newest SusDat list [@Network2021], where the full dataset is available for download, and the CompTox Chemicals Dashboard [@Williams2017] which has an online batch search option (max 5000 at a time). The lists are split into three tables, effluent (Table \@ref(tab:tabeffluent)), biota (Table \@ref(tab:tabbiota)), and sediment (Table \@ref(tab:tabsediment)).
+The list of compounds identified to ID level 3 and above in the initial study were further curated. This was done mainly using the newest SusDat list [@Network2021], where the full dataset is available for download at the NORMAN Suspect List Exchange website (https://www.norman-network.com/nds/SLE/), and the CompTox Chemicals Dashboard [@Williams2017] which has an online batch search option (max 5000 at a time) (https://comptox.epa.gov/dashboard/dsstoxdb/batch_search). The lists are split into three tables, effluent (Table \@ref(tab:tabeffluent)), biota (Table \@ref(tab:tabbiota)), and sediment (Table \@ref(tab:tabsediment)), see Appendix \@ref(curated).
 
 \newpage
 
@@ -272,25 +354,47 @@ The list of compounds identified to ID level 3 and above in the initial study we
 
 \newpage
 
-# Sample information
+# Sample information {#samplesappendix}
 
-```{r samplingtable}
-sample_info %>% 
+```{r}
+sample_cleaned <- sample_info %>% 
   mutate(Country = country_name,
          Species = if_else(matrix == "Biota", species, NA_character_)) %>%
   select(Country, location, site, matrix, Species) %>% 
   arrange(Country, matrix) %>% 
   rename(Matrix = matrix,
          Site = site,
-         Location = location) %>% 
-  kable(digits = 3, booktabs = T, linesep = "", caption = "Sampling stations") %>% 
-  kable_styling(font_size = 9, latex_options = c("striped", "hold_position"))
+         Location = location)
+```
+
+
+```{r samplingtable}
+
+
+caption1 <- "Sampling stations"
+
+if(typelatex == TRUE) {
+  
+  sample_cleaned %>% 
+    kbl(digits = 3, booktabs = T, linesep = "", caption = caption1) %>% 
+    kable_styling(font_size = 9, latex_options = c("striped", "hold_position"))
+  
+}
+
+if(typelatex == FALSE) {
+  sample_cleaned %>% 
+    flextable() %>%
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = "samplingtable")) %>% 
+    bg(i = background_fill(sample_cleaned), bg = "grey95", part = "body")
+}
 
 ```
 
+
 \newpage
 
-# Results from Nordic Suspect Screening, further curated
+# Results from Nordic Suspect Screening, further curated {#curated}
 
 ```{r}
 initialwide <- initial_table %>% 
@@ -305,75 +409,142 @@ initialwide <- initial_table %>%
               names_from = c(country)) %>% 
   left_join(initial_substances %>% select(Name, CompoundInfo, DrugType, PotentialSource),
             by = "Name") %>% 
-  rename(SusDat = Norman_SusDat_ID) %>%
   #take this out, due to a parsing error
   filter(Name != "PUBCHEM_13075981") %>% 
   filter(Name != "KARVON_D") %>% 
-  select(-DrugType)
+  select(-DrugType) %>% 
+  rename(`Molecular Formula` = Molecular_Formula,
+         `Norman SusDat ID` = Norman_SusDat_ID,
+         `ID Level` = IDLevel,
+         `Comp. Info` = CompoundInfo,
+         `Potential Source` = PotentialSource) %>% 
+  arrange(Name)
 
 ```
+
+## Effluent samples
+
 ```{r tabeffluent}
+
+chunkname <- "tabeffluent"
+
 matrix_filter <- "Effluent"
 
-initialwide %>%
+caption1 <- "Detected compounds in the effluent samples"
+
+df <- initialwide %>%
   filter(matrix == matrix_filter) %>% 
-  select(-matrix) %>% 
-  arrange(Name) %>%
-  kable(booktabs = T, linesep = "", escape = F, valign = "c", 
-        caption = paste0("Detected compounds in the effluent samples"),
+  select(-matrix)
+
+
+if(typelatex == TRUE) {
+  
+  df %>% 
+    kbl(booktabs = T, linesep = "", escape = F, valign = "c", 
+        caption = caption1,
         col.names = linebreak(c("Molecular\nFormula", "Name", "CAS", "Norman\nSusDat ID",
                                 "ID\nLevel", country_labels, 
                                 "Comp. \nInfo", "Potential \nSource"),
                               align = "l"),
         longtable = T) %>%
-  kable_styling(font_size = 7, latex_options = c("striped", "repeat_header")) %>%
-  #column_spec(1, "2cm") %>% 
-  column_spec(2, width = "5cm") %>%
-  column_spec(13:14, width = "1.5cm") %>%
-  row_spec(0, angle = 0) %>%
-  landscape()
+    kable_styling(font_size = 8, latex_options = c("striped", "repeat_header", "scale_down")) %>%
+    #column_spec(1, "2cm") %>% 
+    column_spec(2, width = "5cm") %>%
+    column_spec(13:14, width = "1.5cm") %>%
+    row_spec(0, angle = 0) %>%
+    landscape()
+}
+
+if(typelatex == FALSE) {
+  df %>%  
+    flextable() %>%
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = chunkname)) %>% 
+    bg(i = background_fill(df), bg = "grey95", part = "body")
+}
+
 ```
 
+## Biota samples
 
 ```{r tabbiota}
+
+chunkname <- "tabbiota"
+
 matrix_filter <- "Biota"
 
-initialwide %>%
+caption1 <- "Detected compounds in the biota samples"
+
+df <- initialwide %>%
   filter(matrix == matrix_filter) %>% 
-  select(-matrix) %>% 
-  arrange(Name) %>%
-  kable(booktabs = T, linesep = "", escape = F, valign = "c", 
-        caption = paste0("Detected compounds in the biota samples"),
+  select(-matrix)
+
+if(typelatex == TRUE) {
+  
+  df %>% 
+    kbl(booktabs = T, linesep = "", escape = F, valign = "c", 
+        caption = caption1,
         col.names = linebreak(c("Molecular\nFormula", "Name", "CAS", "Norman\nSusDat ID",
                                 "ID\nLevel", country_labels, 
                                 "Comp. \nInfo", "Potential \nSource"),
                               align = "l"),
         longtable = T) %>%
-  kable_styling(font_size = 8, latex_options = c("striped", "repeat_header", "scale_down")) %>%
-  #column_spec(1, "2cm") %>% 
-  column_spec(2, width = "5cm") %>%
-  column_spec(13:14, width = "1.5cm") %>%
-  row_spec(0, angle = 0) %>%
-  landscape()
+    kable_styling(font_size = 8, latex_options = c("striped", "repeat_header", "scale_down")) %>%
+    #column_spec(1, "2cm") %>% 
+    column_spec(2, width = "5cm") %>%
+    column_spec(13:14, width = "1.5cm") %>%
+    row_spec(0, angle = 0) %>%
+    landscape()
+}
+
+if(typelatex == FALSE) {
+  df %>%  
+    flextable() %>%
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = chunkname)) %>% 
+    bg(i = background_fill(df), bg = "grey95", part = "body")
+}
+
 ```
+
+## Sediment samples
+
 ```{r tabsediment}
+
+chunkname <- "tabsediment"
+
 matrix_filter <- "Sediment"
 
-initialwide %>%
+caption1 <- "Detected compounds in the sediment samples"
+
+df <- initialwide %>%
   filter(matrix == matrix_filter) %>% 
-  select(-matrix) %>% 
-  arrange(Name) %>%
-  kable(booktabs = T, linesep = "", escape = F, valign = "c", 
-        caption = paste0("Detected compounds in the sediment samples"),
+  select(-matrix)
+
+if(typelatex == TRUE) {
+  
+  df %>% 
+    kbl(booktabs = T, linesep = "", escape = F, valign = "c", 
+        caption = caption1,
         col.names = linebreak(c("Molecular\nFormula", "Name", "CAS", "Norman\nSusDat ID",
                                 "ID\nLevel", country_labels, 
                                 "Comp. \nInfo", "Potential \nSource"),
                               align = "l"),
         longtable = T) %>%
-  kable_styling(font_size = 8, latex_options = c("striped", "repeat_header", "scale_down")) %>%
-  #column_spec(1, "2cm") %>% 
-  column_spec(2, width = "5cm") %>%
-  column_spec(13:14, width = "1.5cm") %>%
-  row_spec(0, angle = 0) %>%
-  landscape()
+    kable_styling(font_size = 8, latex_options = c("striped", "repeat_header", "scale_down")) %>%
+    #column_spec(1, "2cm") %>% 
+    column_spec(2, width = "5cm") %>%
+    column_spec(13:14, width = "1.5cm") %>%
+    row_spec(0, angle = 0) %>%
+    landscape()
+}
+
+if(typelatex == FALSE) {
+  df %>%  
+    flextable() %>%
+    autofit(add_w = 0, add_h = 0) %>% 
+    set_caption(caption = caption1, autonum = officer::run_autonum(seq_id = "tab", bkm = chunkname)) %>% 
+    bg(i = background_fill(df), bg = "grey95", part = "body")
+}
+
 ```

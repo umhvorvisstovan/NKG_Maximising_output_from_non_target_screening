@@ -1,3 +1,9 @@
+
+
+# This script can only be run if you have the original data available
+# However, it is included so that the history of the original data can be somewhat retained
+
+
 # getting CAS numbers for IDs
 
 library(tidyverse)
