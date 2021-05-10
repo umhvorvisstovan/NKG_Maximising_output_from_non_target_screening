@@ -95,16 +95,15 @@ country_labels <- c("GL", "IS", "FO", "NO", "DK", "SE", "FI")
 
 ## Project background
 
-In recent years, there has been a paradigm shift in chemical analysis, which has been possible with the introduction of chromatography in combination with tandem mass spectrometry. This means that the analyzes can to a greater extent be used to detect new chemicals in, for example, environmental samples, without having decided in advance what to look for. This opens up a field with extreme potential in relation to environmental monitoring and in extension of this also in relation to the possibility of starting the regulation process for new substances that constitute a potential health and / or environmental hazard.
+In recent years, there has been a paradigm shift in chemical analysis, which has been possible with the introduction of chromatography in combination with high-resolution accurate mass spectrometry (for example QTOF or Orbitrap). This means that the analyzes can to a greater extent be used to detect new chemicals in, for example, environmental samples, without having decided in advance what to look for. This opens up a field with extreme potential in relation to environmental monitoring and in extension of this also in relation to the possibility of starting the regulation process for new substances that constitute a potential health and/or environmental hazard.
 
 Under the Nordic Screening Group (www.nordicscreening.org), and with support from the Nordic Chemical Group (NKG) and the Nordic Marine Group (HAV), a suspect screening analysis was performed in 2015 and 2016, which was based precisely on such sophisticated analysis methods just mentioned. The results were published by Schlabach and co-workers in the TemaNord 2017:561 report [@Schlabach2017].
 
-By using these advanced chemical analyzes methods, a large amount of data is generated, as was the case for the Nordic Screening project [@Schlabach2017]. However, the interpretation possibilities of this data are currently limited by databases that have largely been institution-specific, in addition to often being instrument-specific by proprietary software, and of course by the availability of resources in the form of man-hours.
-There is a great deal of work involved in interpreting analysis data in relation to which chemical substances they represent, and this is the background for this current project. There is a wealth of data on chemical substances in the Nordic samples - but it has only been possible to unambiguously identify a small part of these. Another need in relation to optimal use of this data is the need of a description of the identified substance in relation to whether it is a natural or an anthropogenic from the technosphere.
+By using these advanced chemical analyzes methods, a large amount of data is generated, as was the case for the Nordic Screening project [@Schlabach2017]. However, the interpretation possibilities of this data are currently limited by databases that have largely been institution-specific, in addition to often being instrument-specific by proprietary software, and of course by the availability of resources in the form of man-hours. There is a great deal of work involved in interpreting analysis data in relation to which chemical substances they represent, and this is the background for this current project. There is a wealth of data on chemical substances in the Nordic samples - but it has only been possible to unambiguously identify a small part of these. Another need in relation to optimal use of this data is the need of a description of the identified substance in relation to whether it is a natural or an anthropogenic from the technosphere.
 
-## Project aim
+## Project aim and method
 
-The purpose of this project is to optimize the benefits of the major work that has already been done with careful sample selection and sampling in all Nordic countries, with meticulous sample preparation and chemical analysis by a consortium of some of the Nordic region's best professional groups on environmental toxin analyzes. But where perhaps the full potential of the generated data is still to be realized. This project will dig deeper into the data material and try to further identify and describe the substances already detected, to be able to better understand what substances we in modern Nordic societies release into the sea via our wastewater.
+The purpose of this project is to optimize the benefits of the major work that has already been done with careful sample selection and sampling in all of the Nordic countries, with meticulous sample preparation and chemical analysis by a consortium of some of the Nordic region’s most experienced scientific groups in analyses of emerging environmental contaminants. But where perhaps the full potential of the generated data is still to be realized. This project will dig deeper into the data material and try to further identify and describe the substances already detected, to be able to better understand what substances we in modern Nordic societies release into the sea via our wastewater.
 
 
 The work was divided into the following tasks:
@@ -114,10 +113,19 @@ The work was divided into the following tasks:
 * Identify more of the compounds via suspect lists and quarry the digital archive files
 
 
-Because this project mainly consists of data analysis and data curation of list by matching to different types of databases, the results are mainly presented as data tables. Thus this report can be viewed as a data appendix to the initial report by Schlabach et al. [-@Schlabach2017].
+Because this project mainly consists of data analysis and data curation of list by matching to different types of databases, the results are mainly presented as data tables. Thus, this report can be viewed as a data appendix to the initial report by Schlabach et al. [-@Schlabach2017].
 
 Further, all the data presented in this report are available on GitHub (https://github.com/umhvorvisstovan/NKG_Maximising_output_from_non_target_screening).
 
+The analysis and identification of compounds in the environmental matrices may be described as a tiered approach as described by Schymanski et al. [-@Schymanski2015]. In this approach the identification is classified to a levels degree, where the results of non-target screening may be ranked from low confidence data (Level 5) to high confidence data (Level 1), where Level 1 and 2 corresponds to the confidence level normally aspired to in standard monitoring analysis of environmental contaminants. The knowledge gained at the various levels corresponds to:
+
+* **Level 1:** confirmed structure of the molecule (based on reference standard)
+* **Level 2:** a probable structure (based in library/diagnostic evidence)
+* **Level 3:** a tentative candidate compound 
+* **Level 4:** an unequivocal molecular formular (but insufficient evidence of structure)
+* **Level 5:** a (molecular/ion) mass 
+
+In the present work, the aim has been to identify as many compounds as possible to Level 1, 2 and 3. 
 
 
 
@@ -186,7 +194,7 @@ samplingmap
 
 ## Aim
 
-The compounds detected by GCxGC-MS (in biota) will be quantified to the extent possible (without internal standards per se, i.e. crude estimate from peak area).
+The compounds detected by the GCxGC-MS (in biota) will be quantified to the extent possible (without internal standards per se, i.e., crude estimate from peak area).
 
 ## Method
 
@@ -276,7 +284,7 @@ By filtering the chemicals registered with knowledge on industrial application a
 
 ```{r stellan, fig.cap="The figure describes the rationale for using a curated chemicals list for identifying a substance. (Stellan Fisher, presented at CityLeaks seminar, Malmø 2018)", out.width="100%"}
 
-knitr::include_graphics("figures/Stellan.png")
+knitr::include_graphics("figures/Stellan_altered.png")
 ```
 
 ## Suspects lists

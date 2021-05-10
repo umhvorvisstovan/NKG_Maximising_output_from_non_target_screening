@@ -32,10 +32,14 @@ effluent_table <- identified %>%
 
 gcgc_table <- gcgc %>% 
   left_join(sample_info %>% select(sample_no, country) %>% distinct_all(), by = "sample_no") %>% 
-  select(-sample_no) %>% 
+  #select(-sample_no) %>% 
   left_join(initial_substances %>% select(Name, CAS, Molecular_Formula, Norman_SusDat_ID), by = "Name") %>% 
   mutate(Molecular_Formula = if_else(is.na(Molecular_Formula), MolecularFormula, Molecular_Formula),
          Molecular_Formula = str_remove_all(Molecular_Formula, "-"))
+
+# ID Levels of the requantified GCxGC data
+gcgc_levels <- gcgc_table %>% 
+  left_join(initial_results, by = c("Name", "sample_no", "Method"))
 
 
 initial_table <- initial_results %>% 

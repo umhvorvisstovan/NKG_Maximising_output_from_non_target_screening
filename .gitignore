@@ -11,3 +11,6 @@ report.docx
 
 #drafts folder
 drafts
+
+#power point files
+*.pptx
